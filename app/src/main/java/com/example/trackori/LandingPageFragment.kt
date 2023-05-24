@@ -44,6 +44,8 @@ class LandingPageFragment : Fragment() {
         registerButton = view.findViewById(R.id.registerButton)
         registerButton.setOnClickListener {
             // Navigate to register
+            val intent = Intent(activity, RegisterActivity::class.java)
+            startActivity(intent)
         }
 
         return view

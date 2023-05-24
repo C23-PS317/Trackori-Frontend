@@ -25,9 +25,9 @@
             android:name=".LandingPageFragment"
             android:exported="false"
             android:theme="@style/Theme.Trackori"/>
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
+        <activity android:name=".RegisterActivity"
+            android:theme="@style/Theme.AppCompat.Light">
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="false"
