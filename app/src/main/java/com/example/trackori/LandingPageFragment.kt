@@ -21,6 +21,7 @@ class LandingPageFragment : Fragment() {
     private lateinit var loginButton: Button
     private lateinit var registerButton: Button
     private lateinit var binding: ActivityLandingPageBinding
+    private lateinit var preferencesHelper: PreferencesHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,15 +34,28 @@ class LandingPageFragment : Fragment() {
             ImageAdapter(listOf(R.drawable.landing_background))
         viewPager.isUserInputEnabled = false
 
-
         loginButton = view.findViewById(R.id.loginButton)
+        registerButton = view.findViewById(R.id.registerButton)
+
+        preferencesHelper = PreferencesHelper(requireContext())
+        val isLoggedIn = preferencesHelper.isLoggedIn
+
+        if (isLoggedIn) {
+            // User is logged in, hide the buttons
+            loginButton.visibility = View.GONE
+            registerButton.visibility = View.GONE
+        } else {
+            // User is not logged in, show the buttons
+            loginButton.visibility = View.VISIBLE
+            registerButton.visibility = View.VISIBLE
+        }
+
         loginButton.setOnClickListener {
             // Navigate to login
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
 
-        registerButton = view.findViewById(R.id.registerButton)
         registerButton.setOnClickListener {
             // Navigate to register
             val intent = Intent(activity, RegisterActivity::class.java)

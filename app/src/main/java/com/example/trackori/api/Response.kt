@@ -8,6 +8,7 @@ data class RegisterCredentials(
     val username: String,
     val email: String,
     val password: String,
+    val age: Int,
     val gender : String,
     val weight : Float,
     val height : Float,
@@ -43,6 +44,19 @@ data class CalorieHistoryItem(
     val id: String,
     val calories: Float,
     val date: String
+)
+
+data class LoginResponse(
+    val success: Boolean,
+    val message: String,
+    val data: LoginData
+)
+
+data class LoginData(
+    val uid: String,
+    val email: String,
+    val username: String,
+    val accessToken: String
 )
 
 data class CalorieHistoryResponse(

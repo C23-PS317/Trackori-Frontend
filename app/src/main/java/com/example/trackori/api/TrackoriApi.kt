@@ -9,7 +9,7 @@ interface TrackoriApi {
     fun register(@Body user: RegisterCredentials): Call<RegisterResponse>
 
     @POST("login")
-    fun login(@Body credentials: LoginCredentials): Call<UserResponse>
+    fun login(@Body credentials: LoginCredentials): Call<LoginResponse>
 
     @GET("user{uid}")
     fun getUserInfo(@Path("uid") uid: String): Call<UserResponse>
