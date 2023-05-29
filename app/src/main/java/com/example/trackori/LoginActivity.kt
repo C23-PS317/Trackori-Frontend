@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
                                 // Save login status and token to shared preferences
                                 preferencesHelper.isLoggedIn = it.success
                                 preferencesHelper.token = it.data.accessToken
+                                preferencesHelper.uid = it.data.uid
 
                                 // Redirect to MainActivity if login is successful
                                 if (it.success) {

@@ -14,6 +14,10 @@ class PreferencesHelper(context: Context) {
         get() = sharedPreferences.getString("token", null)
         set(value) = sharedPreferences.edit().putString("token", value).apply()
 
+    var uid: String?
+        get() = sharedPreferences.getString("uid", null)
+        set(value) = sharedPreferences.edit().putString("uid", value).apply()
+
     fun clear() {
         sharedPreferences.edit().clear().apply()
     }
