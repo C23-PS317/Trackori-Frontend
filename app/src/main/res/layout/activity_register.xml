@@ -7,66 +7,127 @@
     android:background="@drawable/landing_background"
     tools:context=".RegisterActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/ed_register_username"
-            android:layout_width="378dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="268dp"
-            android:alpha="1"
-            android:background="@android:color/white"
-            android:hint="Username"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/ed_register_email"
-            android:layout_width="378dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:alpha="1"
-            android:background="@android:color/white"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ed_register_username" />
+            <EditText
+                android:id="@+id/ed_register_username"
+                android:layout_width="378dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="268dp"
+                android:alpha="1"
+                android:background="@android:color/white"
+                android:hint="Username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/ed_register_password"
-            android:layout_width="378dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:alpha="1"
-            android:hint="Password"
-            android:background="@android:color/white"
-            android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ed_register_email" />
+            <EditText
+                android:id="@+id/ed_register_email"
+                android:layout_width="378dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:alpha="1"
+                android:background="@android:color/white"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ed_register_username" />
+
+            <EditText
+                android:id="@+id/ed_register_password"
+                android:layout_width="378dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:alpha="1"
+                android:hint="Password"
+                android:background="@android:color/white"
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ed_register_email" />
 
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_register"
-            android:layout_width="381dp"
-            android:layout_height="57dp"
-            android:layout_marginTop="8dp"
-            android:text="Register"
-            android:textColor="#FF000000"
-            app:backgroundTint="#FFFFF6E7"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ed_register_password"
-            android:theme="@style/ThemeOverlay.AppCompat.Light" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Spinner
+                android:id="@+id/spinner_gender"
+                android:layout_width="378dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:alpha="1"
+                android:hint= "Gender"
+                android:background="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ed_register_password" />
+
+            <EditText
+                android:id="@+id/ed_register_height"
+                android:layout_width="378dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:alpha="1"
+                android:background="@android:color/white"
+                android:hint="Height"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinner_gender" />
+
+            <EditText
+                android:id="@+id/ed_register_weight"
+                android:layout_width="378dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:alpha="1"
+                android:background="@android:color/white"
+                android:hint="Weight"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ed_register_height" />
+
+            <Spinner
+                android:id="@+id/spinner_diet_plan"
+                android:layout_width="378dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:alpha="1"
+                android:background="@android:color/white"
+                android:prompt="@string/diet_prompt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ed_register_weight" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_register"
+                android:layout_width="381dp"
+                android:layout_height="57dp"
+                android:layout_marginTop="8dp"
+                android:text="Register"
+                android:textColor="#FF000000"
+                app:backgroundTint="#FFFFF6E7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinner_diet_plan"
+                android:theme="@style/ThemeOverlay.AppCompat.Light" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 
     <FrameLayout
         android:id="@+id/loading_overlay"

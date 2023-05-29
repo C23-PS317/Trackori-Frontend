@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Trackori</string>
+    <string name="diet_prompt">Select Diet Plan</string>
 </resources>
