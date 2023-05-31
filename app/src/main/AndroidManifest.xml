@@ -17,6 +17,15 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ImageProcessingActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Trackori.Splash">
@@ -26,23 +35,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LandingPageFragment"
             android:exported="false"
-            android:theme="@style/Theme.Trackori"/>
-        <activity android:name=".RegisterActivity"
-            android:theme="@style/Theme.AppCompat.Light">
-        </activity>
+            android:theme="@style/Theme.Trackori" />
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.Trackori"/>
+            android:theme="@style/Theme.Trackori" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            >
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>
