@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                                 preferencesHelper.isLoggedIn = it.success
                                 preferencesHelper.token = it.data.accessToken
                                 preferencesHelper.uid = it.data.uid
-                                preferencesHelper.uid = it.data.username
+                                preferencesHelper.username = it.data.username
 
                                 // Redirect to MainActivity if login is successful
                                 if (it.success) {

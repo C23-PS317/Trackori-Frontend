@@ -11,7 +11,7 @@ interface TrackoriApi {
     @POST("login")
     fun login(@Body credentials: LoginCredentials): Call<LoginResponse>
 
-    @GET("user{uid}")
+    @GET("user/{uid}")
     fun getUserInfo(@Path("uid") uid: String): Call<UserResponse>
 
     @POST("users/{uid}/calorie-history")
