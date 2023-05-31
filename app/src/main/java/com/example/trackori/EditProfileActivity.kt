@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.trackori.api.*
 import com.example.trackori.databinding.ActivityEditProfileBinding
+import com.example.trackori.util.calculateDailyCalorieNeeds
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,10 +80,11 @@ class EditProfileActivity : AppCompatActivity() {
         // Get data from EditTexts and Spinners
         val username = binding.edEditUsername.text.toString()
         val age = binding.edEditAge.text.toString().toInt()
-        val weight = binding.edEditWeight.text.toString().toFloatOrNull()
-        val height = binding.edEditHeight.text.toString().toFloatOrNull()
+        val weight = binding.edEditWeight.text.toString().toFloat()
+        val height = binding.edEditHeight.text.toString().toFloat()
         val uid = preferencesHelper.uid
         val previousCalorie = intent.getFloatExtra("calorie", 0f)
+        val previousGender = intent.getStringExtra("gender")
         val api = ApiConfig.getApiService()
 
         val gender = binding.spinnerGender.selectedItem.toString()
@@ -91,6 +93,7 @@ class EditProfileActivity : AppCompatActivity() {
             return
         }
         var no_diet:String? = ""
+        var total_calorie= 0f
 
         val plan = binding.spinnerDietPlan.selectedItem.toString()
         if (plan == "Select Diet Plan") {
@@ -98,12 +101,16 @@ class EditProfileActivity : AppCompatActivity() {
         }
         else if(plan == "No Plan"){
             no_diet = null
+            total_calorie = previousCalorie
+
         }
         else if(plan == "Bulking"){
             no_diet = "bulking"
+            total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
         }
         else if(plan == "Defisit Calorie"){
             no_diet = "defisit"
+            total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
         }
 
         if (username.isNotBlank() && gender.isNotBlank() && gender.isNotBlank() &&
@@ -114,12 +121,15 @@ class EditProfileActivity : AppCompatActivity() {
                     age,
                     weight,
                     height,
-                    previousCalorie,
+                    total_calorie,
                     no_diet,
                 )
 
             binding.loadingOverlay.visibility = View.VISIBLE
             val call = editCredentials.let { ApiConfig.getApiService().editUserInfo(uid!!, it) }
+
+            println(" Ini total kalori valen ${total_calorie}")
+            println(" Ini plan kalori valen ${no_diet}")
 
             if (call != null) {
                 call.enqueue(object : Callback<UserInfoResponse> {
