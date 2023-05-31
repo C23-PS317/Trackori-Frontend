@@ -40,6 +40,21 @@ data class User(
     val plan: String? = null // Nullable as it's optional
 )
 
+data class UserInfo(
+    val username: String,
+    val age: Int,
+    val weight: Float,
+    val height: Float,
+    val dailyCalorieNeeds: Float? = null, // Nullable as it's optional
+    val plan: String? = null // Nullable as it's optional
+)
+
+data class UserInfoResponse(
+    val success: Boolean,
+    val message: String,
+    val data: UserInfo // Nullable as it's optional
+)
+
 data class CalorieHistoryItem(
     val id: String,
     val calories: Float,

@@ -27,7 +27,7 @@ interface TrackoriApi {
     fun editCalorieHistory(@Path("uid") uid: String, @Path("docId") docId: String, @Body data: CalorieHistoryData): Call<CalorieHistoryDataResponse>
 
     @PUT("edit-info/{uid}")
-    fun editUserInfo(@Path("uid") uid: String, @Body user: User): Call<UserResponse>
+    fun editUserInfo(@Path("uid") uid: String, @Body user: UserInfo): Call<UserInfoResponse>
 
     @PUT("edit-credential/{uid}")
     fun editUserCredentials(@Path("uid") uid: String, @Body credentials: EditCredentials): Call<EditCredentialsResponse>

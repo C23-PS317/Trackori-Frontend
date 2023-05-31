@@ -99,9 +99,15 @@ class ProfileActivity : AppCompatActivity() {
         })
 
         binding.btnEdit.setOnClickListener {
-            // Navigate to Edit Info page
-
-            println(uid.toString() + "Ini Dapet UID nya")
+            val intent = Intent(this, EditProfileActivity::class.java)
+            intent.putExtra("username", binding.tvUsername.text.toString())
+            intent.putExtra("age", binding.tvAge.text.toString().toInt())
+            intent.putExtra("weight", binding.tvWeight.text.toString().toFloat())
+            intent.putExtra("height", binding.tvHeight.text.toString().toFloat())
+            intent.putExtra("gender", binding.tvGender.text.toString())
+            intent.putExtra("plan", binding.tvPlan.text.toString())
+            intent.putExtra("calorie", binding.tvCalorie.text.toString().toFloat())
+            startActivity(intent)
         }
     }
     private fun logoutUser() {
