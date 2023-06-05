@@ -20,6 +20,7 @@ import com.example.trackori.databinding.ActivityProfileBinding
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.math.RoundingMode
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -83,7 +84,9 @@ class ProfileActivity : AppCompatActivity() {
                         val user = userResponse.data
                         binding.tvUsername.text = user.username
                         binding.tvEmail.text = user.email
-                        binding.tvCalorie.text = user.dailyCalorieNeeds.toString()
+                        binding.tvCalorie.text = user.dailyCalorieNeeds?.toBigDecimal()
+                            ?.setScale(0, RoundingMode.UP)
+                            ?.toDouble().toString()
                         binding.tvGender.text = user.gender
                         binding.tvHeight.text = user.height.toString()
                         binding.tvWeight.text = user.weight.toString()
