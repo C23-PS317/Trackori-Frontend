@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_camera -> {
-                    // Launch Camera Activity or Fragment
+                    val intent = Intent(this, ImageProcessingActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profile -> {

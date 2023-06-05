@@ -17,9 +17,17 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
+            android:name=".PasswordResetActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Trackori"/>
+        <activity
+            android:name=".CredentialsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Trackori" />
+        <activity
             android:name=".EditProfileActivity"
-            android:theme="@style/Theme.Trackori"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Trackori" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false"
@@ -29,7 +37,8 @@
             android:exported="false" />
         <activity
             android:name=".ImageProcessingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Trackori.Splash"/>
         <activity
             android:name=".SplashActivity"
             android:exported="true"

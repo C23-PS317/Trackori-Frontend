@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class EditProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditProfileBinding
     private val api by lazy { ApiConfig.getApiService() }
@@ -100,8 +101,8 @@ class EditProfileActivity : AppCompatActivity() {
             Toast.makeText(this, "Please select a diet plan", Toast.LENGTH_SHORT).show()
         }
         else if(plan == "No Plan"){
-            no_diet = null
-            total_calorie = previousCalorie
+            no_diet = "no plan"
+            total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
 
         }
         else if(plan == "Bulking"){

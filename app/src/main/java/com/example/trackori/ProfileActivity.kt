@@ -41,7 +41,10 @@ class ProfileActivity : AppCompatActivity() {
         val api = ApiConfig.getApiService()
 
         supportActionBar?.hide()
-
+        binding.btnSettings.setOnClickListener {
+            val intent = Intent(this, CredentialsActivity::class.java)
+            startActivity(intent)
+        }
 
         val logoutButton: Button = findViewById(R.id.btnLogout)
         logoutButton.setOnClickListener {
@@ -64,7 +67,8 @@ class ProfileActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_camera -> {
-                    // Launch Camera Activity or Fragment
+                    val intent = Intent(this, ImageProcessingActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profile -> {

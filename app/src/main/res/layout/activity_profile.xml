@@ -30,6 +30,16 @@
                     android:background="#004D3D"
                     android:orientation="vertical">
 
+                    <ImageButton
+                        android:id="@+id/btnSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_settings"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="Settings"
+                        android:padding="16dp"
+                        android:background="?android:attr/selectableItemBackground" />
+
                     <TextView
                         android:id="@+id/tvUsername"
                         android:layout_width="wrap_content"

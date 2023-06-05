@@ -29,6 +29,12 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.tvForgot.setOnClickListener{
+            val intent = Intent(this, PasswordResetActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         binding.btnLogin.setOnClickListener {
             binding.btnLogin.setOnClickListener {
                 val email = binding.edLoginEmail.text.toString()

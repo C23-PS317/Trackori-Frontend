@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
         setupSpinnerGender()
-        setupSpinnerDietPlan()
+//        setupSpinnerDietPlan()
         setupViews()
     }
 
@@ -58,24 +58,24 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show()
             return
         }
-        var no_diet:String? = ""
+        var no_diet = "no plan"
 
-        val plan = binding.spinnerDietPlan.selectedItem.toString()
-        if (plan == "Select Diet Plan") {
-            Toast.makeText(this, "Please select a diet plan", Toast.LENGTH_SHORT).show()
-        }
-        else if(plan == "No Plan"){
-            no_diet = null
-        }
-        else if(plan == "Bulking"){
-            no_diet = "bulking"
-        }
-        else if(plan == "Defisit Calorie"){
-            no_diet = "defisit"
-        }
+//        val plan = binding.spinnerDietPlan.selectedItem.toString()
+//        if (plan == "Select Diet Plan") {
+//            Toast.makeText(this, "Please select a diet plan", Toast.LENGTH_SHORT).show()
+//        }
+//        else if(plan == "No Plan"){
+//            no_diet = "no plan"
+//        }
+//        else if(plan == "Bulking"){
+//            no_diet = "bulking"
+//        }
+//        else if(plan == "Defisit Calorie"){
+//            no_diet = "defisit"
+//        }
 
             if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && gender.isNotBlank() &&
-                weight != null && height != null && plan.isNotBlank()
+                weight != null && height != null
             ) {
                 val registerCredentials = RegisterCredentials(
                     username,
@@ -146,11 +146,11 @@ class RegisterActivity : AppCompatActivity() {
         binding.spinnerGender.adapter = genderAdapter
     }
 
-    private fun setupSpinnerDietPlan() {
-        val dietPlanOptions = arrayOf("Select Diet Plan","Defisit Calorie", "Bulking", "No Plan")
-        val dietPlanAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, dietPlanOptions)
-        binding.spinnerDietPlan.adapter = dietPlanAdapter
-    }
+//    private fun setupSpinnerDietPlan() {
+//        val dietPlanOptions = arrayOf("Select Diet Plan","Defisit Calorie", "Bulking", "No Plan")
+//        val dietPlanAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, dietPlanOptions)
+//        binding.spinnerDietPlan.adapter = dietPlanAdapter
+//    }
 
 
 }
