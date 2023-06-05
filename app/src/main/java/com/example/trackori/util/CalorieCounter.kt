@@ -12,9 +12,9 @@ fun calculateDailyCalorieNeeds(height: Float, weight: Float, age: Int, gender: S
     }
 
     when (plan) {
-        "defisit" -> planFactor = 0.79 // Reduce calorie intake by 21%
-        "bulking" -> planFactor = 1.21 // Increase calorie intake by 21%
-        else -> planFactor = 1.0 // No plan, maintain current calorie intake
+        "defisit" -> planFactor = 1.225 // Reduce calorie intake by 21%
+        "bulking" -> planFactor = 1.875 // Increase calorie intake by 21%
+        else -> planFactor = 1.55 // No plan, maintain current calorie intake
     }
 
     return (bmr * planFactor).toFloat()
