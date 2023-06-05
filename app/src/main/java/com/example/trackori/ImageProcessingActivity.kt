@@ -1,13 +1,16 @@
 package com.example.trackori
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -17,6 +20,9 @@ import com.dicoding.picodiploma.mycamera.uriToFile
 import com.example.trackori.api.ApiConfig
 import com.example.trackori.api.TrackoriApi
 import com.example.trackori.databinding.ActivityImageProcessingBinding
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 
 class ImageProcessingActivity : AppCompatActivity() {
@@ -48,6 +54,8 @@ class ImageProcessingActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 
+
+
     companion object {
         const val CAMERA_X_RESULT = 200
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
@@ -55,6 +63,7 @@ class ImageProcessingActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImageProcessingBinding.inflate(layoutInflater)
@@ -62,6 +71,22 @@ class ImageProcessingActivity : AppCompatActivity() {
         trackoriApi = ApiConfig.getApiService()
 
         preferencesHelper = PreferencesHelper(this)
+
+        binding.cameraXButton.setOnClickListener { startCameraX() }
+        binding.openGallery.setOnClickListener {
+            Toast.makeText(this, "Gallery button clicked", Toast.LENGTH_SHORT).show()
+            Log.d("GalleryButton", "Button Clicked!")
+            startGallery()
+        }
+        binding.uploadButton.setOnClickListener { uploadImage() }
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.selectedItemId = R.id.nav_camera
+
+        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
+        val profileMenuItemView = menuView.getChildAt(1) as BottomNavigationItemView
+
+        profileMenuItemView.setIconTintList(ContextCompat.getColorStateList(this, R.color.trackori))
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -82,9 +107,6 @@ class ImageProcessingActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        binding.cameraXButton.setOnClickListener { startCameraX() }
-        binding.galleryButton.setOnClickListener { startGallery() }
-        binding.uploadButton.setOnClickListener { uploadImage() }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -138,8 +160,9 @@ class ImageProcessingActivity : AppCompatActivity() {
     }
 
     private fun startGallery() {
+        println("Buka GAllery")
         val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
+        intent.action = ACTION_GET_CONTENT
         intent.type = "image/*"
         val chooser = Intent.createChooser(intent, "Choose a Picture")
         launcherIntentGallery.launch(chooser)
