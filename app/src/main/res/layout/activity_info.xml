@@ -49,14 +49,14 @@
                     app:trackThickness="18dp" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/tvCurrCalorie"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="295.5"
                     android:textColor="@color/pink_300"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/textView2"
+                    app:layout_constraintBottom_toTopOf="@+id/tvTotalCalorie"
                     app:layout_constraintEnd_toEndOf="@+id/circularProgressIndicator"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@+id/circularProgressIndicator"
@@ -64,7 +64,7 @@
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/tvTotalCalorie"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="of 1200 kcal"
@@ -74,7 +74,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/circularProgressIndicator"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@+id/circularProgressIndicator"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvCurrCalorie" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -257,6 +257,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:id = "@+id/testButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
