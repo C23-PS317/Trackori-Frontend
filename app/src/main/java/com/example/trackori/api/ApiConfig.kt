@@ -20,5 +20,19 @@ class ApiConfig {
                 .build()
             return retrofit.create(TrackoriApi::class.java)
         }
+
+        fun getApiML(): TrackoriApi {
+            val loggingInterceptor =
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://ml-model-deployment-ymrdyfncwq-et.a.run.app/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+            return retrofit.create(TrackoriApi::class.java)
+        }
     }
 }

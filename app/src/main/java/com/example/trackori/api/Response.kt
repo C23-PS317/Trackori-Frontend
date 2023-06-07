@@ -26,6 +26,8 @@ data class UserResponse(
     val success: Boolean,
     val message: String,
     val data: User
+    
+
 )
 
 data class User(
@@ -117,4 +119,11 @@ data class CalorieHistoryDataResponse(
     val success: Boolean,
     val message: String,
     val data: CalorieHistoryData
+)
+
+data class PredictResponse(
+    val nama: String,
+    val kalori: Int,
+    val satuan: String,
+    val image_url: String
 )

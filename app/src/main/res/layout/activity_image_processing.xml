@@ -4,25 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F5F5">
+    tools:context=".MainActivity">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cameraXButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:elevation="2dp"
         android:scaleType="fitCenter"
         android:text="Camera X"
+        android:textColor="#FFFFFFFF"
+        app:backgroundTint="@color/trackori"
         app:layout_constraintBottom_toTopOf="@+id/uploadButton"
-        app:layout_constraintEnd_toStartOf="@+id/openGallery"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/galleryButton"
+        app:layout_constraintStart_toStartOf="parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
     <ImageView
         android:id="@+id/previewImageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -34,39 +37,56 @@
         app:srcCompat="@drawable/ic_place_holder" />
 
 
-    <Button
-        android:id="@+id/openGallery"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/galleryButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="Gallery"
-        android:enabled="true"
-        android:clickable="true"
+        android:textColor="#FFFFFFFF"
+        app:backgroundTint="@color/trackori"
         app:layout_constraintBottom_toBottomOf="@+id/cameraXButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cameraXButton" />
+        app:layout_constraintStart_toEndOf="@+id/cameraXButton"
+        android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/uploadButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Process"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        android:text="Process Image"
+        android:textColor="#FFFFFFFF"
+        app:backgroundTint="@color/trackori"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
+<!--    <Button-->
+<!--        android:id="@+id/uploadButton"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:text="Process"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView" />-->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_navigation_menu"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

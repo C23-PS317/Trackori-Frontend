@@ -11,7 +11,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.dicoding.picodiploma.mycamera.createFile
+import com.example.trackori.ImageProcessingActivity
 import com.example.trackori.databinding.ActivityCameraBinding
+import com.example.trackori.databinding.ActivityImageProcessingBinding
 
 class CameraActivity : AppCompatActivity() {
 
@@ -19,7 +21,10 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
+
+        binding = ActivityCameraBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
 
         startCamera()
 

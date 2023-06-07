@@ -1,5 +1,4 @@
 package com.example.trackori
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,19 +9,27 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.dicoding.picodiploma.mycamera.reduceFileImage
 import com.dicoding.picodiploma.mycamera.rotateFile
 import com.dicoding.picodiploma.mycamera.uriToFile
 import com.example.trackori.api.ApiConfig
+import com.example.trackori.api.PredictResponse
 import com.example.trackori.api.TrackoriApi
 import com.example.trackori.databinding.ActivityImageProcessingBinding
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 class ImageProcessingActivity : AppCompatActivity() {
@@ -30,7 +37,14 @@ class ImageProcessingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityImageProcessingBinding
     private var getFile: File? = null
     private lateinit var trackoriApi: TrackoriApi
+    private lateinit var ImageDetection: TrackoriApi
     private lateinit var preferencesHelper: PreferencesHelper
+
+    companion object {
+        const val CAMERA_X_RESULT = 200
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSIONS = 10
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -54,30 +68,38 @@ class ImageProcessingActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 
-
-
-    companion object {
-        const val CAMERA_X_RESULT = 200
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
-
-
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImageProcessingBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_image_processing)
+        setContentView(binding.root)
         trackoriApi = ApiConfig.getApiService()
+        ImageDetection = ApiConfig.getApiML()
 
         preferencesHelper = PreferencesHelper(this)
 
-        binding.cameraXButton.setOnClickListener { startCameraX() }
-        binding.openGallery.setOnClickListener {
-            Toast.makeText(this, "Gallery button clicked", Toast.LENGTH_SHORT).show()
-            Log.d("GalleryButton", "Button Clicked!")
-            startGallery()
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                this,
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
         }
+
+        val imagePath = intent.getStringExtra("imageFile")
+        if (!imagePath.isNullOrEmpty()) {
+            val file = File(imagePath)
+            if (file.exists()) {
+                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                binding.previewImageView.setImageBitmap(bitmap)
+            }
+        }
+
+
+        supportActionBar?.hide()
+
+        binding.cameraXButton.setOnClickListener { startCameraX() }
+        binding.galleryButton.setOnClickListener { startGallery() }
         binding.uploadButton.setOnClickListener { uploadImage() }
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
@@ -88,24 +110,27 @@ class ImageProcessingActivity : AppCompatActivity() {
 
         profileMenuItemView.setIconTintList(ContextCompat.getColorStateList(this, R.color.trackori))
 
-        if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(
-                this,
-                REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSIONS
-            )
-        }
-        val imagePath = intent.getStringExtra("imageFile")
-        if (!imagePath.isNullOrEmpty()) {
-            val file = File(imagePath)
-            if (file.exists()) {
-                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                binding.previewImageView.setImageBitmap(bitmap)
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_info -> {
+                    // Launch Info Activity or Fragment
+                    true
+                }
+                R.id.nav_camera -> {
+                    val intent = Intent(this, ImageProcessingActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_profile -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
             }
         }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
 
     }
 
@@ -160,7 +185,6 @@ class ImageProcessingActivity : AppCompatActivity() {
     }
 
     private fun startGallery() {
-        println("Buka GAllery")
         val intent = Intent()
         intent.action = ACTION_GET_CONTENT
         intent.type = "image/*"
@@ -168,7 +192,59 @@ class ImageProcessingActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
 
-    private fun uploadImage(){
-        TODO()
+
+    private fun uploadImage() {
+        val file = reduceFileImage(getFile as File)
+        val uid = preferencesHelper.uid
+
+        if (getFile != null) {
+            val requestImageFile = file.asRequestBody("image/jpg".toMediaType())
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "file",
+                file.name,
+                requestImageFile
+            )
+            val uploadImageRequest = uid?.let { preferencesHelper.token?.let { it1 ->
+                ImageDetection.postImage(
+                    it1, it, imageMultipart)
+            } }
+            if (uploadImageRequest != null) {
+                uploadImageRequest.enqueue(object : Callback<PredictResponse> {
+                    override fun onResponse(
+                        call: Call<PredictResponse>,
+                        response: Response<PredictResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body()
+                            if (responseBody != null) {
+                                // You can now access the fields of the response.
+                                // For example:
+                                val nama = responseBody.nama
+                                val kalori = responseBody.kalori
+                                val satuan = responseBody.satuan
+                                val imageUrl = responseBody.image_url
+                                // You can then use these fields in your application.
+                                // Here is just an example of showing a toast message with the 'nama' value:
+                                Toast.makeText(this@ImageProcessingActivity, nama, Toast.LENGTH_SHORT).show()
+
+                                val intent = Intent(this@ImageProcessingActivity, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                startActivity(intent)
+                                finish()
+                            }
+                        } else {
+                            Toast.makeText(this@ImageProcessingActivity, response.message(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PredictResponse>, t: Throwable) {
+                        Toast.makeText(this@ImageProcessingActivity, t.message, Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+        } else {
+            Toast.makeText(this@ImageProcessingActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+        }
     }
 }

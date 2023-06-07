@@ -1,5 +1,6 @@
 package com.example.trackori.api
 
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -41,4 +42,12 @@ interface TrackoriApi {
     // For the protected resources
     @GET("protected")
     fun accessProtected(@Header("Authorization") token: String): Call<UserResponse>
+
+    @Multipart
+    @POST("predict/{uid}")
+    fun postImage(
+        @Header("Authorization") token: String,
+        @Path("uid") uid: String,
+        @Part image: MultipartBody.Part
+    ): Call<PredictResponse>
 }

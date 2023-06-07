@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.commit
+import com.example.trackori.ImageProcessingActivity
 import com.example.trackori.api.ApiConfig
 import com.example.trackori.api.LogoutResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
