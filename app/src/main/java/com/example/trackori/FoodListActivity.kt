@@ -14,6 +14,7 @@ import com.example.trackori.viewmodel.FoodViewModel
 import androidx.appcompat.widget.SearchView
 import android.app.AlertDialog
 import android.graphics.Color
+import androidx.core.widget.addTextChangedListener
 import com.example.trackori.api.FoodByIdData
 import com.example.trackori.databinding.DialogPortionBinding
 
@@ -56,19 +57,34 @@ class FoodListActivity : AppCompatActivity() {
     private fun showPortionDialog(foodData: FoodByIdData) {
         val dialogBinding = DialogPortionBinding.inflate(LayoutInflater.from(this))
         val dialogView = dialogBinding.root
+
+        val satuanParts = foodData.satuan.split(" ")
+        val defaultPortion = if (satuanParts[0].toIntOrNull() != null) satuanParts[0] else "1"
+
+        // Set the default portion value
+        dialogBinding.editTextPortion.setText(defaultPortion)
+
+        // Display the unit
+        val unit = if(satuanParts.size > 1) satuanParts[1] else ""
+        dialogBinding.textViewPortionUnit.text = unit
+
+        // Calculate and display the total calories
+        val caloriesPerUnit = if (satuanParts[0].toIntOrNull() != null) foodData.kalori.toDouble() / satuanParts[0].toInt() else foodData.kalori.toDouble()
+        dialogBinding.textViewTotalCalories.text = "Total Kalori: ${caloriesPerUnit * defaultPortion.toDouble()}"
+
         val portionDialog = AlertDialog.Builder(this)
-            .setTitle("Enter the portion amount")
+            .setTitle("Masukkan jumlah porsi")
             .setView(dialogView)
             .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .create()
 
         portionDialog.setOnShowListener {
             val positiveButton = portionDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val negativeButton = portionDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
 
-            positiveButton.setTextColor(Color.BLUE)
-            negativeButton.setTextColor(Color.RED)
+            positiveButton.setTextColor(Color.GREEN)
+            negativeButton.setTextColor(Color.GREEN)
 
             positiveButton.setOnClickListener {
                 val portion = dialogBinding.editTextPortion.text.toString().toInt()
@@ -76,6 +92,12 @@ class FoodListActivity : AppCompatActivity() {
 
                 portionDialog.dismiss()
             }
+        }
+
+        // Update the total calories when the portion changes
+        dialogBinding.editTextPortion.addTextChangedListener {
+            val portion = it.toString().toIntOrNull() ?: 0
+            dialogBinding.textViewTotalCalories.text = "Total Kalori: ${caloriesPerUnit * portion}"
         }
 
         portionDialog.show()
