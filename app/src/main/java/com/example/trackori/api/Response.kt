@@ -79,7 +79,7 @@ data class LoginData(
 data class CalorieHistoryResponse(
     val success: Boolean,
     val message: String,
-    val data: List<CalorieHistoryItem>
+    val data: CalorieHistoryItem
 )
 
 data class EditCredentials(

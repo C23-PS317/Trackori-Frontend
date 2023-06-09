@@ -66,6 +66,8 @@ class ProfileActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.nav_info -> {
                     // Launch Info Activity or Fragment
+                    val intent = Intent(this, InfoActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_camera -> {
