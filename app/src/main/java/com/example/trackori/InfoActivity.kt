@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.runBlocking
+import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -97,7 +98,9 @@ class InfoActivity: AppCompatActivity() {
                     val user = userResponse.data
                     val dailyCalorie = user.dailyCalorieNeeds!!
                     finalDailyCalorie = dailyCalorie
-                    val tempTotalCalorie = "of ${dailyCalorie.toString()} kcal"
+                    val tempTotalCalorie = "of ${dailyCalorie.toBigDecimal()
+                        ?.setScale(0, RoundingMode.UP)
+                        ?.toDouble().toString()} kcal"
                     binding.tvTotalCalorie.text = tempTotalCalorie
                 }
             }
@@ -170,7 +173,7 @@ class InfoActivity: AppCompatActivity() {
     private fun updateCalorieHistoryView() {
         binding.tvCurrCalorie.text = finalCalorieHistory.toString()
         val percentageCal = (finalCalorieHistory / finalDailyCalorie) * 100
-//        binding.circularProgressIndicator.progress = percentageCal.roundToInt()
+        binding.circularProgressIndicator.progress = percentageCal.roundToInt()
     }
 
     private fun setCalorieHistory(cal : Float) {
