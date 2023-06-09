@@ -115,7 +115,8 @@ class ImageProcessingActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_info -> {
-                    // Launch Info Activity or Fragment
+                    val intent = Intent(this, InfoActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_camera -> {
@@ -227,8 +228,10 @@ class ImageProcessingActivity : AppCompatActivity() {
                                 // Here is just an example of showing a toast message with the 'nama' value:
                                 Toast.makeText(this@ImageProcessingActivity, nama, Toast.LENGTH_SHORT).show()
 
-                                val intent = Intent(this@ImageProcessingActivity, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                val intent = Intent(this@ImageProcessingActivity, FoodListActivity::class.java).apply {
+                                    putExtra("searchQuery", nama)
+                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                }
                                 startActivity(intent)
                                 finish()
                             }

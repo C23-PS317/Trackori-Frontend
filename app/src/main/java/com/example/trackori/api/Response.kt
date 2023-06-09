@@ -127,3 +127,44 @@ data class PredictResponse(
     val satuan: String,
     val image_url: String
 )
+data class FoodItem(
+    val id: String,
+    val kalori: Int?,
+    val nama: String?,
+    val image_url: String?,
+    val satuan: String?
+)
+
+data class FoodsHistoryResponse(
+    val success: Boolean,
+    val message: String,
+    val data: List<FoodItem>
+
+
+)
+
+data class FoodResponse(
+    val success: Boolean,
+    val message: String,
+    val data: List<AllFoodItem>
+)
+
+data class AllFoodItem(
+    val id: String,
+    val nama: String,
+    val satuan: String,
+    val kalori: Int
+)
+
+data class FoodByIdResponse(
+    val success: Boolean,
+    val message: String,
+    val data: FoodByIdData
+)
+
+data class FoodByIdData(
+    val id: String,
+    val nama: String,
+    val kalori: Int,
+    val satuan: String
+)

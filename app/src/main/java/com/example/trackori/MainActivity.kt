@@ -24,12 +24,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+        val intent = Intent(this, InfoActivity::class.java)
+        startActivity(intent)
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_info -> {
-                    // Launch Info Activity or Fragment
+                    val intent = Intent(this, InfoActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_camera -> {

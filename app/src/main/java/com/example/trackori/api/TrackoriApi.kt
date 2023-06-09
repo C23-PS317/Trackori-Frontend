@@ -2,6 +2,7 @@ package com.example.trackori.api
 
 import okhttp3.MultipartBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface TrackoriApi {
@@ -50,4 +51,13 @@ interface TrackoriApi {
         @Path("uid") uid: String,
         @Part image: MultipartBody.Part
     ): Call<PredictResponse>
+
+    @GET("users/{uid}/all-foods-history")
+    suspend fun getAllFoodsHistory(@Path("uid") uid: String): Response<FoodsHistoryResponse>
+
+    @GET("foods")
+    fun getAllFoods(): Call<FoodResponse>
+
+    @GET("foods/{docId}")
+    fun getFoodById(@Path("docId") docId: String): Call<FoodByIdResponse>
 }

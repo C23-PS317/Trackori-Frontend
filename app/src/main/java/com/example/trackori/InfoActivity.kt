@@ -64,7 +64,8 @@ class InfoActivity: AppCompatActivity() {
                     true
                 }
                 R.id.nav_camera -> {
-                    // Launch Camera Activity or Fragment
+                    val intent = Intent(this, ImageProcessingActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profile -> {
@@ -164,7 +165,7 @@ class InfoActivity: AppCompatActivity() {
     private fun updateCalorieHistoryView() {
         binding.tvCurrCalorie.text = finalCalorieHistory.toString()
         val percentageCal = (finalCalorieHistory / finalDailyCalorie) * 100
-        binding.circularProgressIndicator.progress = percentageCal.roundToInt()
+//        binding.circularProgressIndicator.progress = percentageCal.roundToInt()
     }
 
     private fun setCalorieHistory(cal : Float) {
