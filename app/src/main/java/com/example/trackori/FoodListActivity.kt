@@ -13,8 +13,10 @@ import com.example.trackori.databinding.ActivityFoodListBinding
 import com.example.trackori.viewmodel.FoodViewModel
 import androidx.appcompat.widget.SearchView
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import androidx.core.widget.addTextChangedListener
+import com.example.trackori.api.CalorieHistoryData
 import com.example.trackori.api.FoodByIdData
 import com.example.trackori.databinding.DialogPortionBinding
 
@@ -23,6 +25,7 @@ class FoodListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFoodListBinding
     private lateinit var viewModel: FoodViewModel
     private lateinit var adapter: FoodListAdapter
+    private lateinit var preferencesHelper: PreferencesHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,7 @@ class FoodListActivity : AppCompatActivity() {
         adapter = FoodListAdapter(listOf())
         binding.rvFoods.layoutManager = LinearLayoutManager(this)
         binding.rvFoods.adapter = adapter
+        preferencesHelper = PreferencesHelper(this)
 
         adapter.onAddButtonClick = { foodData ->
             // foodData is the data of the item where the add button was clicked
@@ -88,9 +92,21 @@ class FoodListActivity : AppCompatActivity() {
 
             positiveButton.setOnClickListener {
                 val portion = dialogBinding.editTextPortion.text.toString().toInt()
-                // Handle the portion here
+                val totalCalories = caloriesPerUnit * portion
+
+
+                val userId = preferencesHelper.uid.toString()
+
+
+                val calorieHistoryData = CalorieHistoryData(foodData.nama, totalCalories.toFloat())
+
+                // Send the data to the API
+                viewModel.addCalorieHistory(userId, calorieHistoryData)
 
                 portionDialog.dismiss()
+
+                val intent = Intent(this, InfoActivity::class.java)
+                startActivity(intent)
             }
         }
 

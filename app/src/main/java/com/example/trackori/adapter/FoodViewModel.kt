@@ -36,4 +36,30 @@ class FoodViewModel() : ViewModel() {
             }
         })
     }
+    fun addCalorieHistory(uid: String, data: CalorieHistoryData) {
+        viewModelScope.launch {
+            trackoriApi.addCalorieHistory(uid, data).enqueue(object : Callback<CalorieHistoryDataResponse> {
+                override fun onResponse(
+                    call: Call<CalorieHistoryDataResponse>,
+                    response: Response<CalorieHistoryDataResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            // Handle successful response
+                            Log.d(TAG, "Successfully added calorie history: ${responseBody.data}")
+                        } else {
+                            Log.e(TAG, "onResponse: response body is null")
+                        }
+                    } else {
+                        Log.e(TAG, "onFailure: ${response.message()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<CalorieHistoryDataResponse>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                }
+            })
+        }
+    }
 }

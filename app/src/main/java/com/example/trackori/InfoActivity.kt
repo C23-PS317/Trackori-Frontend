@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -117,48 +118,52 @@ class InfoActivity: AppCompatActivity() {
                 ) {
                     val calorieHistoryRes = response.body()
                     if (calorieHistoryRes != null && calorieHistoryRes.success) {
-                        val calorieResItem = calorieHistoryRes.data
-                        if (calorieResItem != null) {
-                            finalCalorieHistory = calorieResItem.calories
-                            docId = calorieResItem.id
-                            updateCalorieHistoryView()
-                            binding.tvCurrCalorie.text = finalCalorieHistory.toString()
-                        } else {
-                            finalCalorieHistory = 0.0f
-                            updateCalorieHistoryView()
-                            binding.tvCurrCalorie.text = finalCalorieHistory.toString()
+                        var totalCalories = 0.0f
+                        var ids = ArrayList<String>()
+
+                        for (item in calorieHistoryRes.data) {
+                            totalCalories += item.calories
+                            ids.add(item.id)
                         }
+
+                        finalCalorieHistory = totalCalories
+                        docId = ids.joinToString(",") // Combine all ids into a single string with comma separators
+
+                        updateCalorieHistoryView()
+                        binding.tvCurrCalorie.text = finalCalorieHistory.toString()
+                    } else {
+                        finalCalorieHistory = 0.0f
+                        updateCalorieHistoryView()
+                        binding.tvCurrCalorie.text = finalCalorieHistory.toString()
                     }
                 }
 
                 override fun onFailure(call: Call<CalorieHistoryResponse>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    Log.e("API_ERROR", "Failure: ${t.message}")
                 }
-
             })
-
-        val tempAddButton: MaterialButton = findViewById(R.id.testButton)
-
-        tempAddButton.setOnClickListener {
-            val tempNum = finalCalorieHistory + 100.0f
-            val tempCal = CalorieHistoryData(tempNum)
-            api.editCalorieHistory(uid!!, docId, tempCal).enqueue(object: Callback<CalorieHistoryDataResponse> {
-                override fun onResponse(
-                    call: Call<CalorieHistoryDataResponse>,
-                    response: Response<CalorieHistoryDataResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val intent = Intent(this@InfoActivity, ProfileActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-
-                override fun onFailure(call: Call<CalorieHistoryDataResponse>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-        }
+//        val tempAddButton: MaterialButton = findViewById(R.id.testButton)
+//
+//        tempAddButton.setOnClickListener {
+//            val tempNum = finalCalorieHistory + 100.0f
+//            val tempCal = CalorieHistoryData(tempNum)
+//            api.editCalorieHistory(uid!!, docId, tempCal).enqueue(object: Callback<CalorieHistoryDataResponse> {
+//                override fun onResponse(
+//                    call: Call<CalorieHistoryDataResponse>,
+//                    response: Response<CalorieHistoryDataResponse>
+//                ) {
+//                    if (response.isSuccessful) {
+//                        val intent = Intent(this@InfoActivity, ProfileActivity::class.java)
+//                        startActivity(intent)
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<CalorieHistoryDataResponse>, t: Throwable) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//            })
+//        }
     }
 
 
