@@ -29,6 +29,17 @@
             android:background="@drawable/custom_edittext"
             android:orientation="vertical"
             android:padding="5dp">
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Settings"
+                android:padding="16dp"
+                android:src="@drawable/ic_back">
+
+            </ImageButton>
 
             <TextView
                 android:id="@+id/EditText"

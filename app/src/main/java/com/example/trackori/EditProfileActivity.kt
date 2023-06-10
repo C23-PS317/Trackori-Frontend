@@ -27,6 +27,8 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         preferencesHelper = PreferencesHelper(this)
 
+        supportActionBar?.hide()
+
         val previousUsername = intent.getStringExtra("username")
         val previousAge = intent.getIntExtra("age", 0)
         val previousWeight = intent.getFloatExtra("weight", 0f)
@@ -55,6 +57,9 @@ class EditProfileActivity : AppCompatActivity() {
         if (dietPlanPosition != -1) {
             binding.spinnerDietPlan.setSelection(dietPlanPosition)
         }
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
 
         setupViews()
 
@@ -76,6 +81,8 @@ class EditProfileActivity : AppCompatActivity() {
         val dietPlanAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, dietPlanOptions)
         binding.spinnerDietPlan.adapter = dietPlanAdapter
     }
+
+
 
     private fun SaveEdit() {
         // Get data from EditTexts and Spinners
@@ -182,6 +189,7 @@ class EditProfileActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
+
 
 
     }

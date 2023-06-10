@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.trackori.ImageProcessingActivity
 import retrofit2.Call
@@ -43,10 +44,10 @@ class ProfileActivity : AppCompatActivity() {
         val api = ApiConfig.getApiService()
 
         supportActionBar?.hide()
-        binding.btnSettings.setOnClickListener {
-            val intent = Intent(this, CredentialsActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.btnSettings.setOnClickListener {
+//            val intent = Intent(this, CredentialsActivity::class.java)
+//            startActivity(intent)
+//        }
 
         val logoutButton: Button = findViewById(R.id.btnLogout)
         logoutButton.setOnClickListener {
@@ -109,16 +110,33 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
 
-        binding.btnEdit.setOnClickListener {
-            val intent = Intent(this, EditProfileActivity::class.java)
-            intent.putExtra("username", binding.tvUsername.text.toString())
-            intent.putExtra("age", binding.tvAge.text.toString().toInt())
-            intent.putExtra("weight", binding.tvWeight.text.toString().toFloat())
-            intent.putExtra("height", binding.tvHeight.text.toString().toFloat())
-            intent.putExtra("gender", binding.tvGender.text.toString())
-            intent.putExtra("plan", binding.tvPlan.text.toString())
-            intent.putExtra("calorie", binding.tvCalorie.text.toString().toFloat())
-            startActivity(intent)
+        binding.btnSettings.setOnClickListener {
+            // Buat array untuk pilihan
+            val options = arrayOf("Edit Credentials", "Edit Profile")
+
+            // Buat AlertDialog
+            AlertDialog.Builder(this)
+                .setTitle("Choose Action")
+                .setItems(options) { dialog, which ->
+                    // Jalankan aksi berdasarkan pilihan yang dipilih
+                    when (which) {
+                        0 -> { // Edit Credentials
+                            val intent = Intent(this, CredentialsActivity::class.java)
+                            startActivity(intent)
+                        }
+                        1 -> { // Edit Profile
+                            val intent = Intent(this, EditProfileActivity::class.java)
+                            intent.putExtra("username", binding.tvUsername.text.toString())
+                            intent.putExtra("age", binding.tvAge.text.toString().toInt())
+                            intent.putExtra("weight", binding.tvWeight.text.toString().toFloat())
+                            intent.putExtra("height", binding.tvHeight.text.toString().toFloat())
+                            intent.putExtra("gender", binding.tvGender.text.toString())
+                            intent.putExtra("plan", binding.tvPlan.text.toString())
+                            intent.putExtra("calorie", binding.tvCalorie.text.toString().toFloat())
+                            startActivity(intent)
+                        }
+                    }
+                }.show()
         }
     }
     private fun logoutUser() {

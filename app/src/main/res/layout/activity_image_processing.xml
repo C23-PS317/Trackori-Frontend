@@ -30,6 +30,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="#D3D3D3"
+        android:padding="2dp"
         app:layout_constraintBottom_toTopOf="@+id/cameraXButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
