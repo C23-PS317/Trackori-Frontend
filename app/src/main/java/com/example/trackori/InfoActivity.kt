@@ -56,8 +56,8 @@ class InfoActivity: AppCompatActivity() {
 
         val infoButton: ImageButton = findViewById(R.id.infoButton)
         infoButton.setOnClickListener {
-            val intent = Intent(this@InfoActivity, FoodListActivity::class.java).apply {
-                putExtra("activityOrigin", "InfoActivity")
+            val intent = Intent(this@InfoActivity, CalorieHistory::class.java).apply {
+//                putExtra("activityOrigin", "InfoActivity")
             }
             startActivity(intent)
         }

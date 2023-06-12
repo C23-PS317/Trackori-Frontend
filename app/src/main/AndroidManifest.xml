@@ -18,9 +18,13 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
-            android:name=".FoodListActivity"
+            android:name=".CalorieHistory"
             android:exported="false"
             android:theme="@style/Theme.Trackori"/>
+        <activity
+            android:name=".FoodListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Trackori" />
         <activity
             android:name=".PasswordResetActivity"
             android:exported="false"
