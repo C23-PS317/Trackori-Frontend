@@ -45,6 +45,14 @@ class InfoActivity: AppCompatActivity() {
 
         preferencesHelper = PreferencesHelper(this)
 
+        if (!preferencesHelper.isLoggedIn) {
+            // User is not logged in. Redirect them to the login activity
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
         val uid = preferencesHelper.uid
         val api = ApiConfig.getApiService()
 
@@ -88,6 +96,7 @@ class InfoActivity: AppCompatActivity() {
 
 
         // Get total calorie
+
         api.getUserInfo(uid!!).enqueue(object : Callback<UserResponse> {
             override fun onResponse(
                 call: Call<UserResponse>,
@@ -172,7 +181,7 @@ class InfoActivity: AppCompatActivity() {
 
     private fun updateCalorieHistoryView() {
         binding.tvCurrCalorie.text = finalCalorieHistory.toString()
-        val percentageCal = (finalCalorieHistory / finalDailyCalorie) * 100
+        val percentageCal = if (finalDailyCalorie == 0.0f) 0f else (finalCalorieHistory / finalDailyCalorie) * 100
         binding.circularProgressIndicator.progress = percentageCal.roundToInt()
     }
 

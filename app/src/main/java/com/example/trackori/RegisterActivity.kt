@@ -1,6 +1,7 @@
 package com.example.trackori
 
 import android.R
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,6 +45,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     private fun registerUser() {
         // Get data from EditTexts and Spinners
         val username = binding.edRegisterUsername.text.toString()
