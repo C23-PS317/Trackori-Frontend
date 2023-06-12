@@ -113,6 +113,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Calorie"
+                                android:drawableStart="@drawable/ic_fire"
                                 android:textSize="27dp"
                                 android:textColor="#004D3D"
                                 android:textStyle="bold"/>

@@ -150,12 +150,17 @@ class InfoActivity: AppCompatActivity() {
                     if (calorieHistoryRes != null && calorieHistoryRes.success) {
                         var totalCalories = 0.0f
                         var ids = ArrayList<String>()
-                        val aggregatedData: List<CalorieHistoryItem> = calorieHistoryRes.data.orEmpty().filter { it.name?.isNotBlank() == true }
-                        aggregatedData?.let { adapter.setData(it) }
-                        for (item in calorieHistoryRes.data) {
-                            totalCalories += item.calories
-                            ids.add(item.id)
-                        }
+                        val data = calorieHistoryRes.data.orEmpty().filter { it.name?.isNotBlank() == true }
+                        val aggregatedData: List<CalorieHistoryItem> = data
+                            .groupBy { it.name }
+                            .map { (name, items) ->
+                                // Sum calories of the same food items
+                                val caloriesSum = items.sumByDouble { it.calories.toDouble() }.toFloat()
+                                totalCalories += caloriesSum
+                                ids.add(items.joinToString(",") { it.id })
+                                CalorieHistoryItem(name = name, calories = caloriesSum, id = items[0].id, date = items[0].date)
+                            }
+                        aggregatedData.let { adapter.setData(it) }
 
                         finalCalorieHistory = totalCalories
                         docId = ids.joinToString(",") // Combine all ids into a single string with comma separators
