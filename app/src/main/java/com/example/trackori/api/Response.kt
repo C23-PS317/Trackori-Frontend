@@ -59,6 +59,7 @@ data class UserInfoResponse(
 
 data class CalorieHistoryItem(
     val id: String,
+    val name: String,
     val calories: Float,
     val date: String
 )

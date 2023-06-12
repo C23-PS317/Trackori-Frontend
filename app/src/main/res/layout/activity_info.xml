@@ -29,10 +29,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageButton
+                android:id="@+id/infoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_info"
+                android:background="?android:attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="@+id/circularProgressIndicator"
+                app:layout_constraintTop_toTopOf="@+id/circularProgressIndicator" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
+
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/circularProgressIndicator"
@@ -47,6 +57,8 @@
                     app:trackColor="@color/trackori"
                     app:trackCornerRadius="8dp"
                     app:trackThickness="18dp" />
+
+
 
                 <TextView
                     android:id="@+id/tvCurrCalorie"

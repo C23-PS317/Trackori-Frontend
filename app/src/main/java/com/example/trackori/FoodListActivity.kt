@@ -40,9 +40,18 @@ class FoodListActivity : AppCompatActivity() {
         binding.rvFoods.adapter = adapter
         preferencesHelper = PreferencesHelper(this)
 
-        adapter.onAddButtonClick = { foodData ->
-            // foodData is the data of the item where the add button was clicked
-            showPortionDialog(foodData)
+        val activityOrigin = intent.getStringExtra("activityOrigin")
+        when(activityOrigin) {
+            "ImageProcessingActivity" -> {
+                val foodId = intent.getStringExtra("searchQuery")
+                foodId?.let { viewModel.getFoodById(it) }
+            }
+            "InfoActivity" -> {
+                viewModel.getAllFood()
+            }
+            else -> {
+                // Optional: Handle an unexpected activity origin.
+            }
         }
 
         val foodName = intent.getStringExtra("searchQuery")

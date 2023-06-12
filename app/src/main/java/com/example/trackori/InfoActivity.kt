@@ -177,6 +177,11 @@ class InfoActivity: AppCompatActivity() {
 //            })
 //        }
     }
+// Ini buat ntar kalo misal nge add food ya mem jadi dia auto nge getall food
+//    val intent = Intent(this@InfoActivity, FoodListActivity::class.java).apply {
+//        putExtra("activityOrigin", "InfoActivity")
+//    }
+//    startActivity(intent)
 
 
     private fun updateCalorieHistoryView() {

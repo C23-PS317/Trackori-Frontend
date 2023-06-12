@@ -14,6 +14,8 @@ import java.util.Locale
 class FoodViewModel() : ViewModel() {
     private val trackoriApi = ApiConfig.getApiService()
     val foodData = MutableLiveData<FoodByIdData?>()
+
+    val AllfoodData = MutableLiveData<List<AllFoodItem>?>()
     private val TAG = "FoodViewModel" // define TAG for logging
 
     fun getFoodById(id: String) = viewModelScope.launch {
@@ -32,6 +34,27 @@ class FoodViewModel() : ViewModel() {
             }
 
             override fun onFailure(call: Call<FoodByIdResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+            }
+        })
+    }
+
+    fun getAllFood() = viewModelScope.launch {
+        trackoriApi.getAllFoods().enqueue(object : Callback<FoodResponse> {
+            override fun onResponse(call: Call<FoodResponse>, response: Response<FoodResponse>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        AllfoodData.postValue(responseBody.data) // set data to LiveData
+                    } else {
+                        Log.e(TAG, "onResponse: response body is null")
+                    }
+                } else {
+                    Log.e(TAG, "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<FoodResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })

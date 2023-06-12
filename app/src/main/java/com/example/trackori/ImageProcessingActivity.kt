@@ -230,6 +230,7 @@ class ImageProcessingActivity : AppCompatActivity() {
 
                                 val intent = Intent(this@ImageProcessingActivity, FoodListActivity::class.java).apply {
                                     putExtra("searchQuery", nama)
+                                    putExtra("activityOrigin", "ImageProcessingActivity")
                                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 }
                                 startActivity(intent)
