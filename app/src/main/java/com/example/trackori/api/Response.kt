@@ -171,3 +171,22 @@ data class FoodByIdData(
     val kalori: Int,
     val satuan: String
 )
+
+data class GroupedCalorieHistoryItem(
+    val date: String,
+    val totalCalories: Float,
+    val details: List<CalorieHistoryItem>
+)
+data class CalorieHistoryItemDetail(
+    val id: String,
+    val date: String,
+    val foodList: List<FoodItemHistory>,
+) {
+    val totalCalories: Int
+        get() = foodList.sumBy { it.calories }
+}
+
+data class FoodItemHistory(
+    val name: String,
+    val calories: Int
+)

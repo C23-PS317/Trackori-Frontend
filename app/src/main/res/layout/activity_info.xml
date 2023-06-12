@@ -54,7 +54,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:trackColor="@color/trackori"
+                    app:trackColor="@color/light_blue_100"
                     app:trackCornerRadius="8dp"
                     app:trackThickness="18dp" />
 

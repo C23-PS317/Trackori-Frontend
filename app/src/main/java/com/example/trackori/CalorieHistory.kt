@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trackori.adapter.CalorieHistoryAdapter
-import com.example.trackori.api.ApiConfig
-import com.example.trackori.api.CalorieHistoryItem
-import com.example.trackori.api.CalorieHistoryResponse
+import com.example.trackori.api.*
 import com.example.trackori.databinding.ActivityCalorieHistoryBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,14 +47,21 @@ class CalorieHistory : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful && response.body()?.success == true) {
                         val data = response.body()?.data
-                        val aggregatedData: List<CalorieHistoryItem> = response.body()?.data.orEmpty()
+                        val aggregatedData: List<CalorieHistoryItemDetail> = response.body()?.data.orEmpty()
                             .groupBy { it.date }
                             .map { (date, items) ->
-                                CalorieHistoryItem(
+                                val foodList = items.filter { it.name?.isNotBlank() == true && it.calories > 0 }
+                                    .groupBy { it.name }
+                                    .map { (name, foods) ->
+                                        FoodItemHistory(
+                                            name = name.orEmpty(),
+                                            calories = foods.sumByDouble { it.calories.toDouble() }.toInt()
+                                        )
+                                    }
+                                CalorieHistoryItemDetail(
                                     id = "", // You might need to change this according to your requirement
                                     date = date,
-                                    name = "", // You might need to change this according to your requirement
-                                    calories = items.sumByDouble { it.calories.toDouble() }.toFloat()
+                                    foodList = foodList
                                 )
                             }
                         aggregatedData?.let { adapter.setData(it) }
@@ -69,4 +74,7 @@ class CalorieHistory : AppCompatActivity() {
             })
         }
     }
+
+
+
 }

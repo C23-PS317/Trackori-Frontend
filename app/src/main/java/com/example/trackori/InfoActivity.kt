@@ -120,6 +120,8 @@ class InfoActivity: AppCompatActivity() {
                         ?.setScale(0, RoundingMode.UP)
                         ?.toDouble().toString()} kcal"
                     binding.tvTotalCalorie.text = tempTotalCalorie
+
+                    updateCalorieHistoryView()
                 }
             }
 
