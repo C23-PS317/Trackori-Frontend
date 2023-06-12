@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -51,6 +52,14 @@ class InfoActivity: AppCompatActivity() {
             startActivity(intent)
             finish()
             return
+        }
+
+        val infoButton: ImageButton = findViewById(R.id.infoButton)
+        infoButton.setOnClickListener {
+            val intent = Intent(this@InfoActivity, FoodListActivity::class.java).apply {
+                putExtra("activityOrigin", "InfoActivity")
+            }
+            startActivity(intent)
         }
 
         val uid = preferencesHelper.uid
@@ -182,6 +191,8 @@ class InfoActivity: AppCompatActivity() {
 //        putExtra("activityOrigin", "InfoActivity")
 //    }
 //    startActivity(intent)
+
+
 
 
     private fun updateCalorieHistoryView() {

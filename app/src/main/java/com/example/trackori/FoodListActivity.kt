@@ -35,7 +35,7 @@ class FoodListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
         supportActionBar?.hide()
 
-        adapter = FoodListAdapter(listOf())
+        adapter = FoodListAdapter(listOf(), listOf())
         binding.rvFoods.layoutManager = LinearLayoutManager(this)
         binding.rvFoods.adapter = adapter
         preferencesHelper = PreferencesHelper(this)
@@ -54,18 +54,42 @@ class FoodListActivity : AppCompatActivity() {
             }
         }
 
-        val foodName = intent.getStringExtra("searchQuery")
-        foodName?.let { viewModel.getFoodById(it) }
+        adapter.onAddButtonClick = { foodData ->
+            // foodData is the data of the item where the add button was clicked
+            showPortionDialog(foodData)
+        }
 
-        viewModel.foodData.observe(this, Observer { foodData ->
-            if (foodData != null) {
-                // Do something with the food data
-                // For example, add it to a list and give that list to the adapter
-                adapter.setData(listOf(foodData))
-            } else {
-                // Handle the error case
+        when(activityOrigin) {
+            "ImageProcessingActivity" -> {
+                val foodName = intent.getStringExtra("searchQuery")
+                foodName?.let { viewModel.getFoodById(it) }
+
+                viewModel.foodData.observe(this, Observer { foodData ->
+                    if (foodData != null) {
+                        // Do something with the food data
+                        // For example, add it to a list and give that list to the adapter
+                        adapter.setData(listOf(foodData))
+                    } else {
+                        // Handle the error case
+                    }
+                })
             }
-        })
+            "InfoActivity" -> {
+                viewModel.AllfoodData.observe(this, Observer { foodListData ->
+                    if (foodListData != null) {
+                        // Update your adapter with new data
+                        adapter.setDataAllFood(foodListData)
+                    } else {
+                        // Handle the error case
+                    }
+                })
+            }
+            else -> {
+                // Optional: Handle an unexpected activity origin.
+            }
+        }
+
+
     }
     private fun showPortionDialog(foodData: FoodByIdData) {
         val dialogBinding = DialogPortionBinding.inflate(LayoutInflater.from(this))

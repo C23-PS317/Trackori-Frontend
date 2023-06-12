@@ -153,9 +153,10 @@ data class FoodResponse(
 
 data class AllFoodItem(
     val id: String,
-    val nama: String,
     val satuan: String,
-    val kalori: Int
+    val kalori: Int,
+    val nama: String
+
 )
 
 data class FoodByIdResponse(
