@@ -68,7 +68,7 @@ class FoodListAdapter(private var foods: List<FoodByIdData>, private var allFood
 
     inner class AllFoodViewHolder(private val binding: ItemFoodBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(food: AllFoodItem) {
-            binding.foodName.text = "Nama Makanan: ${food.nama}"
+            binding.foodName.text = "Nama Makanan: ${food.nama.split("_", " ").joinToString(separator = " ", transform = String::capitalize)}"
             binding.foodKalori.text = "Total Kalori: ${food.kalori?.toString()} kcals"
             binding.foodSatuan.text = "Porsi: ${food.satuan}"
 

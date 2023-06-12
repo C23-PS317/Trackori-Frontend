@@ -10,6 +10,8 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trackori.adapter.FoodHistoryAdapter
 import com.example.trackori.api.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,6 +32,7 @@ class InfoActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityInfoBinding
     private lateinit var preferencesHelper: PreferencesHelper
+    private lateinit var adapter: FoodHistoryAdapter
 
     private var finalDailyCalorie: Float = 0.0f
     private var finalCalorieHistory: Float = 0.0f
@@ -43,6 +46,10 @@ class InfoActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
+        adapter = FoodHistoryAdapter(listOf())
+
+        binding.rvFoodHistory.layoutManager = LinearLayoutManager(this)
+        binding.rvFoodHistory.adapter = adapter
 
         preferencesHelper = PreferencesHelper(this)
 
@@ -118,7 +125,7 @@ class InfoActivity: AppCompatActivity() {
                     finalDailyCalorie = dailyCalorie
                     val tempTotalCalorie = "of ${dailyCalorie.toBigDecimal()
                         ?.setScale(0, RoundingMode.UP)
-                        ?.toDouble().toString()} kcal"
+                        ?.toDouble().toString()} kcals"
                     binding.tvTotalCalorie.text = tempTotalCalorie
 
                     updateCalorieHistoryView()
@@ -143,7 +150,8 @@ class InfoActivity: AppCompatActivity() {
                     if (calorieHistoryRes != null && calorieHistoryRes.success) {
                         var totalCalories = 0.0f
                         var ids = ArrayList<String>()
-
+                        val aggregatedData: List<CalorieHistoryItem> = calorieHistoryRes.data.orEmpty().filter { it.name?.isNotBlank() == true }
+                        aggregatedData?.let { adapter.setData(it) }
                         for (item in calorieHistoryRes.data) {
                             totalCalories += item.calories
                             ids.add(item.id)
@@ -165,34 +173,17 @@ class InfoActivity: AppCompatActivity() {
                     Log.e("API_ERROR", "Failure: ${t.message}")
                 }
             })
-//        val tempAddButton: MaterialButton = findViewById(R.id.testButton)
 //
-//        tempAddButton.setOnClickListener {
-//            val tempNum = finalCalorieHistory + 100.0f
-//            val tempCal = CalorieHistoryData(tempNum)
-//            api.editCalorieHistory(uid!!, docId, tempCal).enqueue(object: Callback<CalorieHistoryDataResponse> {
-//                override fun onResponse(
-//                    call: Call<CalorieHistoryDataResponse>,
-//                    response: Response<CalorieHistoryDataResponse>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        val intent = Intent(this@InfoActivity, ProfileActivity::class.java)
-//                        startActivity(intent)
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<CalorieHistoryDataResponse>, t: Throwable) {
-//                    TODO("Not yet implemented")
-//                }
-//
-//            })
-//        }
+        val tambahMakanan: MaterialButton = findViewById(R.id.tambahMakanan)
+        tambahMakanan.setOnClickListener{
+            val intent = Intent(this@InfoActivity, FoodListActivity::class.java).apply {
+                putExtra("activityOrigin", "InfoActivity")
+            }
+            startActivity(intent)
+        }
     }
 // Ini buat ntar kalo misal nge add food ya mem jadi dia auto nge getall food
-//    val intent = Intent(this@InfoActivity, FoodListActivity::class.java).apply {
-//        putExtra("activityOrigin", "InfoActivity")
-//    }
-//    startActivity(intent)
+
 
 
 

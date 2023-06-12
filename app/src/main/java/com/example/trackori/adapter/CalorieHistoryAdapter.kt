@@ -32,13 +32,13 @@ class CalorieHistoryAdapter(private var calorieHistoryList: List<CalorieHistoryI
     inner class CalorieHistoryViewHolder(private val binding: ItemCalorieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CalorieHistoryItemDetail) { // changed from GroupedCalorieHistoryItem to CalorieHistoryItemDetail
             binding.date.text = item.date
-            binding.totalCalorie.text = item.totalCalories.toString() + "kcal"
+            binding.totalCalorie.text = item.totalCalories.toString() + " kcals"
 
             binding.detailsLayout.visibility = View.GONE
             binding.extendButton.setOnClickListener {
                 if (binding.detailsLayout.visibility == View.GONE) {
                     binding.detailsLayout.visibility = View.VISIBLE
-                    binding.foodName.text = item.foodList.joinToString("\n") { "${it.name} : ${it.calories} kcal" } // This will display the food name and its calories
+                    binding.foodName.text = item.foodList.joinToString("\n") { "${it.name.split("_", " ").joinToString(separator = " ", transform = String::capitalize)} : ${it.calories} kcals" } // This will display the food name and its calories
                     //binding.foodCalories.text = item.totalCalories.toString()
                 } else {
                     binding.detailsLayout.visibility = View.GONE
