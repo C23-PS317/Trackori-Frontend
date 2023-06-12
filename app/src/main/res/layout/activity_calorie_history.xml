@@ -12,6 +12,8 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
+
+
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
@@ -35,6 +37,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistory"

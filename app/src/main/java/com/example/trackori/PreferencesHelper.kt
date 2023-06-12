@@ -22,6 +22,10 @@ class PreferencesHelper(context: Context) {
         get() = sharedPreferences.getString("username", null)
         set(value) = sharedPreferences.edit().putString("username", value).apply()
 
+    var dailycalorie: Float
+        get() = sharedPreferences.getFloat("dailyCalorieNeeds", 0F) // Here you should specify a valid default value like 0F
+        set(value) = sharedPreferences.edit().putFloat("dailyCalorieNeeds", value).apply()
+
     fun clear() {
         sharedPreferences.edit().clear().apply()
     }

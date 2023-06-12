@@ -99,8 +99,11 @@ class ProfileActivity : AppCompatActivity() {
                         binding.tvGender.text = user.gender
                         binding.tvHeight.text = user.height.toString()
                         binding.tvWeight.text = user.weight.toString()
-                        binding.tvPlan.text = user.plan
+                        binding.tvPlan.text = user.plan.toString().split(" ").joinToString(separator = " ", transform = String::capitalize)
                         binding.tvAge.text = user.age.toString()
+
+                        preferencesHelper.dailycalorie =
+                            user.dailyCalorieNeeds?.toBigDecimal()?.setScale(0, RoundingMode.UP)?.toFloat()!!
                     }
                 }
             }
