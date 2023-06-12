@@ -104,8 +104,9 @@ class InfoActivity: AppCompatActivity() {
         }
 
         val current = LocalDateTime.now()
-
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        val operan = DateTimeFormatter.ofPattern("dd MM yyyy HH:mm:ss.SSS")
+        binding.dateNow.text = "Today, ${current.format(operan).slice(0..9)}"
         val formatted = current.format(formatter)
 
         val realDate = formatted.slice(0..9)
