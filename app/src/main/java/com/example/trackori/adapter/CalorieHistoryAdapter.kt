@@ -58,4 +58,5 @@ class CalorieHistoryAdapter(private var calorieHistoryList: List<CalorieHistoryI
             }
         }
     }
+
 }
