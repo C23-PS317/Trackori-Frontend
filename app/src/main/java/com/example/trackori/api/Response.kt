@@ -155,7 +155,8 @@ data class AllFoodItem(
     val id: String,
     val satuan: String,
     val kalori: Int,
-    val nama: String
+    val nama: String,
+    val image_db: String
 
 )
 
@@ -169,7 +170,8 @@ data class FoodByIdData(
     val id: String,
     val nama: String,
     val kalori: Int,
-    val satuan: String
+    val satuan: String,
+    val image_db: String
 )
 
 data class GroupedCalorieHistoryItem(

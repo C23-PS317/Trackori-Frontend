@@ -59,7 +59,9 @@ class FoodListAdapter(private var foods: List<FoodByIdData>, private var allFood
             binding.foodKalori.text = "Total Kalori: ${food.kalori?.toString()} kcals"
             binding.foodSatuan.text = "Porsi: ${food.satuan}"
 
-            Glide.with(binding.root)
+
+            Glide.with(binding.root).load(food.image_db)
+                .into(binding.foodImage)
             binding.buttonAdd.setOnClickListener {
                 onAddButtonClick?.invoke(food)
             }
@@ -72,10 +74,11 @@ class FoodListAdapter(private var foods: List<FoodByIdData>, private var allFood
             binding.foodKalori.text = "Total Kalori: ${food.kalori?.toString()} kcals"
             binding.foodSatuan.text = "Porsi: ${food.satuan.split(" ").joinToString(separator = " ", transform = String::capitalize)}"
 
-            Glide.with(binding.root)
+            Glide.with(binding.root).load(food.image_db)
+                .into(binding.foodImage)
             binding.buttonAdd.setOnClickListener {
                 // Handle this case appropriately as AllFoodItem might not have the same properties as FoodByIdData
-                val foodByIdData = FoodByIdData(food.id, food.nama, food.kalori, food.satuan)
+                val foodByIdData = FoodByIdData(food.id, food.nama, food.kalori, food.satuan, food.image_db)
                 onAddButtonClick?.invoke(foodByIdData)
             }
         }
