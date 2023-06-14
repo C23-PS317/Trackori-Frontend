@@ -6,15 +6,20 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trackori.api.CalorieHistoryItem
+import com.example.trackori.api.CalorieHistoryResponse
+import com.example.trackori.api.FoodByIdData
 import com.example.trackori.databinding.ItemHistoryBinding
 
-class FoodHistoryAdapter(private var foodHistoryList: List<CalorieHistoryItem>) :
+class FoodHistoryAdapter(private var foodHistoryList: List<CalorieHistoryItem>,private val onEditClickListener: (id: String) -> Unit, var onEditButtonClick: ((CalorieHistoryItem) -> Unit)? = null) :
     RecyclerView.Adapter<FoodHistoryAdapter.FoodHistoryViewHolder> () {
 
-    inner class FoodHistoryViewHolder(private val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class FoodHistoryViewHolder(val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CalorieHistoryItem) {
             binding.foodName.text = item.name.split(" ", "_").joinToString(separator = " ", transform = String::capitalize)
-            binding.foodKalori.text = "${item.calories} kcals"
+            binding.foodKalori.text = "Total Kalori : ${item.calories} kcals"
+            val unit = item.unit.split(" ").last()
+            binding.foodPortion.text = "Porsi : ${item.portion} $unit"
+            binding.foodSatuan.text = "Satuan : ${item.unit}"
         }
     }
 
@@ -28,7 +33,14 @@ class FoodHistoryAdapter(private var foodHistoryList: List<CalorieHistoryItem>) 
     }
 
     override fun onBindViewHolder(holder: FoodHistoryViewHolder, position: Int) {
-        holder.bind(foodHistoryList[position])
+        val item = foodHistoryList[position]
+        holder.bind(item)
+
+        holder.binding.buttonEdit.setOnClickListener {
+            onEditClickListener(item.id)
+            onEditButtonClick?.invoke(item)
+        }
+
     }
 
     fun setData(it: List<CalorieHistoryItem>) {

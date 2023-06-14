@@ -84,5 +84,35 @@ class FoodViewModel() : ViewModel() {
                 }
             })
         }
+
+
     }
+
+    fun updateCalorieHistory(uid: String, docId: String, data: CalorieHistoryData) {
+        viewModelScope.launch {
+            trackoriApi.editCalorieHistory(uid, docId, data).enqueue(object : Callback<CalorieHistoryDataResponse> {
+                override fun onResponse(
+                    call: Call<CalorieHistoryDataResponse>,
+                    response: Response<CalorieHistoryDataResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            // Handle successful response
+                            Log.d(TAG, "Successfully updated calorie history: ${responseBody.data}")
+                        } else {
+                            Log.e(TAG, "onResponse: response body is null")
+                        }
+                    } else {
+                        Log.e(TAG, "onFailure: ${response.message()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<CalorieHistoryDataResponse>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                }
+            })
+        }
+    }
+
 }
