@@ -1,15 +1,20 @@
 package com.example.trackori
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trackori.adapter.FoodHistoryAdapter
 import com.example.trackori.api.*
@@ -18,6 +23,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import com.example.trackori.databinding.ActivityInfoBinding
 import com.example.trackori.databinding.ActivityProfileBinding
+import com.example.trackori.databinding.DialogPortionBinding
+import com.example.trackori.viewmodel.FoodViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,10 +40,12 @@ class InfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityInfoBinding
     private lateinit var preferencesHelper: PreferencesHelper
     private lateinit var adapter: FoodHistoryAdapter
+    private lateinit var viewModel: FoodViewModel
 
     private var finalDailyCalorie: Float = 0.0f
     private var finalCalorieHistory: Float = 0.0f
     private lateinit var docId : String
+    private lateinit var itemId : String
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("RestrictedApi")
@@ -45,8 +54,20 @@ class InfoActivity: AppCompatActivity() {
         binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
+
         supportActionBar?.hide()
-        adapter = FoodHistoryAdapter(listOf())
+        adapter = FoodHistoryAdapter(listOf(), onEditClickListener = { id ->
+
+            itemId = id
+        })
+
+        adapter.onEditButtonClick = { foodData ->
+            // foodData is the data of the item where the add button was clicked
+            showPortionDialog(foodData)
+        }
+
+
 
         binding.rvFoodHistory.layoutManager = LinearLayoutManager(this)
         binding.rvFoodHistory.adapter = adapter
@@ -150,18 +171,15 @@ class InfoActivity: AppCompatActivity() {
                     val calorieHistoryRes = response.body()
                     if (calorieHistoryRes != null && calorieHistoryRes.success) {
                         var totalCalories = 0.0f
-                        var ids = ArrayList<String>()
+                        val ids = ArrayList<String>()
                         val data = calorieHistoryRes.data.orEmpty().filter { it.name?.isNotBlank() == true }
-                        val aggregatedData: List<CalorieHistoryItem> = data
-                            .groupBy { it.name }
-                            .map { (name, items) ->
-                                // Sum calories of the same food items
-                                val caloriesSum = items.sumByDouble { it.calories.toDouble() }.toFloat()
-                                totalCalories += caloriesSum
-                                ids.add(items.joinToString(",") { it.id })
-                                CalorieHistoryItem(name = name, calories = caloriesSum, id = items[0].id, date = items[0].date)
-                            }
-                        aggregatedData.let { adapter.setData(it) }
+                        data.forEach { item ->
+                            totalCalories += item.calories
+                            ids.add(item.id)
+                        }
+
+                        // Directly set the data to the adapter without aggregation
+                        adapter.setData(data)
 
                         finalCalorieHistory = totalCalories
                         docId = ids.joinToString(",") // Combine all ids into a single string with comma separators
@@ -210,6 +228,74 @@ class InfoActivity: AppCompatActivity() {
                 // Handle error
             }
         })
+
+
+
+
+
+    }
+
+
+
+    private fun showPortionDialog(foodData: CalorieHistoryItem) {
+        val dialogBinding = DialogPortionBinding.inflate(LayoutInflater.from(this))
+        val dialogView = dialogBinding.root
+
+        val satuanParts = foodData.unit.split(" ")
+        val defaultPortion = foodData.portion.toInt().toString()
+
+        // Set the default portion value
+        dialogBinding.editTextPortion.setText(defaultPortion)
+
+        // Display the unit
+        val unit = if(satuanParts.size > 1) satuanParts[1] else ""
+        dialogBinding.textViewPortionUnit.text = unit
+
+        // Calculate calories per unit
+        val caloriesPerUnit = foodData.calories.toDouble() / foodData.portion
+
+        // Display the total calories
+        dialogBinding.textViewTotalCalories.text = "Total Kalori: ${caloriesPerUnit * defaultPortion.toDouble()}"
+
+        val portionDialog = AlertDialog.Builder(this)
+            .setTitle("Masukkan jumlah porsi")
+            .setView(dialogView)
+            .setPositiveButton("OK", null)
+            .setNegativeButton("Batal", null)
+            .create()
+
+        portionDialog.setOnShowListener {
+            val positiveButton = portionDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val negativeButton = portionDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+
+            positiveButton.setTextColor(Color.rgb(0,77,61))
+            negativeButton.setTextColor(Color.RED)
+
+            positiveButton.setOnClickListener {
+                val portion = dialogBinding.editTextPortion.text.toString().toInt()
+                val totalCalories = caloriesPerUnit * portion
+
+                val userId = preferencesHelper.uid.toString()
+
+                val calorieHistoryData = CalorieHistoryData(foodData.name, totalCalories.toFloat(), portion.toFloat(), foodData.unit)
+
+                // Send the data to the API
+                viewModel.updateCalorieHistory(userId, foodData.id, calorieHistoryData)
+
+                portionDialog.dismiss()
+
+                // Recreate the activity to reload the page
+                recreate()
+            }
+        }
+
+        // Update the total calories when the portion changes
+        dialogBinding.editTextPortion.addTextChangedListener {
+            val portion = it.toString().toIntOrNull() ?: 0
+            dialogBinding.textViewTotalCalories.text = "Total Kalori: ${caloriesPerUnit * portion}"
+        }
+
+        portionDialog.show()
     }
 // Ini buat ntar kalo misal nge add food ya mem jadi dia auto nge getall food
 

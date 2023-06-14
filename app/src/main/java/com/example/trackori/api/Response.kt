@@ -61,7 +61,9 @@ data class CalorieHistoryItem(
     val id: String,
     val name: String,
     val calories: Float,
-    val date: String
+    val date: String,
+    val portion: Float,
+    val unit : String
 )
 
 data class LoginResponse(
@@ -114,7 +116,9 @@ data class LogoutResponse(
 // For data in calorie-history
 data class CalorieHistoryData(
     val name : String,
-    val calories: Float
+    val calories: Float,
+    val portion : Float,
+    val unit : String
 )
 
 data class CalorieHistoryDataResponse(

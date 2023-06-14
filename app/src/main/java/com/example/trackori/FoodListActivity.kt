@@ -120,8 +120,8 @@ class FoodListActivity : AppCompatActivity() {
             val positiveButton = portionDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val negativeButton = portionDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
 
-            positiveButton.setTextColor(Color.GREEN)
-            negativeButton.setTextColor(Color.GREEN)
+            positiveButton.setTextColor(Color.rgb(0,77,61))
+            negativeButton.setTextColor(Color.RED)
 
             positiveButton.setOnClickListener {
                 val portion = dialogBinding.editTextPortion.text.toString().toInt()
@@ -131,7 +131,7 @@ class FoodListActivity : AppCompatActivity() {
                 val userId = preferencesHelper.uid.toString()
 
 
-                val calorieHistoryData = CalorieHistoryData(foodData.nama, totalCalories.toFloat())
+                val calorieHistoryData = CalorieHistoryData(foodData.nama, totalCalories.toFloat(), portion.toFloat(), foodData.satuan)
 
                 // Send the data to the API
                 viewModel.addCalorieHistory(userId, calorieHistoryData)
