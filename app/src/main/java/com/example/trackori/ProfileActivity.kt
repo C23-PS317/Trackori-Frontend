@@ -30,6 +30,8 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
     private lateinit var preferencesHelper: PreferencesHelper
+    private var weight : String = ""
+    private var height : String = ""
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,14 +93,16 @@ class ProfileActivity : AppCompatActivity() {
                     val userResponse = response.body()
                     if (userResponse != null && userResponse.success) {
                         val user = userResponse.data
+                        weight = user.weight.toString()
+                        height = user.height.toString()
                         binding.tvUsername.text = user.username
                         binding.tvEmail.text = user.email
                         binding.tvCalorie.text = user.dailyCalorieNeeds?.toBigDecimal()
                             ?.setScale(0, RoundingMode.UP)
                             ?.toDouble().toString()
                         binding.tvGender.text = user.gender
-                        binding.tvHeight.text = user.height.toString()
-                        binding.tvWeight.text = user.weight.toString()
+                        binding.tvHeight.text = user.height.toString() + "cm"
+                        binding.tvWeight.text = user.weight.toString() + " kg"
                         binding.tvPlan.text = user.plan.toString().split(" ").joinToString(separator = " ", transform = String::capitalize)
                         binding.tvAge.text = user.age.toString()
 
@@ -131,8 +135,8 @@ class ProfileActivity : AppCompatActivity() {
                             val intent = Intent(this, EditProfileActivity::class.java)
                             intent.putExtra("username", binding.tvUsername.text.toString())
                             intent.putExtra("age", binding.tvAge.text.toString().toInt())
-                            intent.putExtra("weight", binding.tvWeight.text.toString().toFloat())
-                            intent.putExtra("height", binding.tvHeight.text.toString().toFloat())
+                            intent.putExtra("weight", weight.toFloat())
+                            intent.putExtra("height", height.toFloat())
                             intent.putExtra("gender", binding.tvGender.text.toString())
                             intent.putExtra("plan", binding.tvPlan.text.toString())
                             intent.putExtra("calorie", binding.tvCalorie.text.toString().toFloat())

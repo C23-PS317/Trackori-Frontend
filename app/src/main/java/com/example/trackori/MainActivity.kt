@@ -24,8 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        val intent = Intent(this, InfoActivity::class.java)
-        startActivity(intent)
+
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -62,6 +61,8 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             bottomNavigationView.visibility = View.VISIBLE
+            val intent = Intent(this, InfoActivity::class.java)
+            startActivity(intent)
             supportActionBar?.show()
         }
     }

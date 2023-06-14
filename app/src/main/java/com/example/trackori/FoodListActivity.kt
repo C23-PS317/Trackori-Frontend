@@ -19,6 +19,7 @@ import androidx.core.widget.addTextChangedListener
 import com.example.trackori.api.CalorieHistoryData
 import com.example.trackori.api.FoodByIdData
 import com.example.trackori.databinding.DialogPortionBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class FoodListActivity : AppCompatActivity() {
@@ -57,6 +58,11 @@ class FoodListActivity : AppCompatActivity() {
         adapter.onAddButtonClick = { foodData ->
             // foodData is the data of the item where the add button was clicked
             showPortionDialog(foodData)
+        }
+
+        val backButton: FloatingActionButton = findViewById(R.id.fab_back)
+        backButton.setOnClickListener {
+            finish()
         }
 
         when(activityOrigin) {
