@@ -187,6 +187,29 @@ class InfoActivity: AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+        api.getUserInfo(uid!!).enqueue(object: Callback<UserResponse> {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                if (response.isSuccessful) {
+                    val userResponse = response.body()
+                    if (userResponse != null && userResponse.success) {
+                        val user = userResponse.data
+                        binding.tvCalorie.text = user.dailyCalorieNeeds?.toBigDecimal()
+                            ?.setScale(0, RoundingMode.UP)
+                            ?.toDouble().toString()
+                        binding.tvPlan.text = user.plan.toString().split(" ").joinToString(separator = " ", transform = String::capitalize)
+                        binding.tvAge.text = user.age.toString()
+
+                        preferencesHelper.dailycalorie =
+                            user.dailyCalorieNeeds?.toBigDecimal()?.setScale(0, RoundingMode.UP)?.toFloat()!!
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                // Handle error
+            }
+        })
     }
 // Ini buat ntar kalo misal nge add food ya mem jadi dia auto nge getall food
 
