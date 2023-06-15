@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trackori.adapter.FoodHistoryAdapter
@@ -61,13 +62,10 @@ class InfoActivity: AppCompatActivity() {
 
             itemId = id
         })
-
         adapter.onEditButtonClick = { foodData ->
             // foodData is the data of the item where the add button was clicked
             showPortionDialog(foodData)
         }
-
-
 
         binding.rvFoodHistory.layoutManager = LinearLayoutManager(this)
         binding.rvFoodHistory.adapter = adapter
@@ -132,6 +130,23 @@ class InfoActivity: AppCompatActivity() {
 
         val realDate = formatted.slice(0..9)
 
+        // Get calorie history
+        viewModel.fetchFoodHistoryData(uid!!, realDate!!)
+        viewModel.foodHistoryData.observe(this, Observer { data ->
+            var totalCalories = 0.0f
+            val ids = ArrayList<String>()
+            data.forEach { item ->
+                totalCalories += item.calories
+                ids.add(item.id)
+            }
+            adapter.setData(data)
+
+            finalCalorieHistory = totalCalories
+            docId = ids.joinToString(",") // Combine all ids into a single string with comma separators
+
+            updateCalorieHistoryView()
+            binding.tvCurrCalorie.text = finalCalorieHistory.toString()
+        })
 
         // Get total calorie
 
@@ -160,44 +175,6 @@ class InfoActivity: AppCompatActivity() {
 
         })
 
-        // Get calorie history
-
-        api.getCalorieHistoryByDate(uid!!, realDate!!)
-            .enqueue(object : Callback<CalorieHistoryResponse> {
-                override fun onResponse(
-                    call: Call<CalorieHistoryResponse>,
-                    response: Response<CalorieHistoryResponse>
-                ) {
-                    val calorieHistoryRes = response.body()
-                    if (calorieHistoryRes != null && calorieHistoryRes.success) {
-                        var totalCalories = 0.0f
-                        val ids = ArrayList<String>()
-                        val data = calorieHistoryRes.data.orEmpty().filter { it.name?.isNotBlank() == true }
-                        data.forEach { item ->
-                            totalCalories += item.calories
-                            ids.add(item.id)
-                        }
-
-                        // Directly set the data to the adapter without aggregation
-                        adapter.setData(data)
-
-                        finalCalorieHistory = totalCalories
-                        docId = ids.joinToString(",") // Combine all ids into a single string with comma separators
-
-                        updateCalorieHistoryView()
-                        binding.tvCurrCalorie.text = finalCalorieHistory.toString()
-                    } else {
-                        finalCalorieHistory = 0.0f
-                        updateCalorieHistoryView()
-                        binding.tvCurrCalorie.text = finalCalorieHistory.toString()
-                    }
-                }
-
-                override fun onFailure(call: Call<CalorieHistoryResponse>, t: Throwable) {
-                    Log.e("API_ERROR", "Failure: ${t.message}")
-                }
-            })
-//
         val tambahMakanan: MaterialButton = findViewById(R.id.tambahMakanan)
         tambahMakanan.setOnClickListener{
             val intent = Intent(this@InfoActivity, FoodListActivity::class.java).apply {
@@ -206,33 +183,17 @@ class InfoActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
-        api.getUserInfo(uid!!).enqueue(object: Callback<UserResponse> {
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                if (response.isSuccessful) {
-                    val userResponse = response.body()
-                    if (userResponse != null && userResponse.success) {
-                        val user = userResponse.data
-                        binding.tvCalorie.text = user.dailyCalorieNeeds?.toBigDecimal()
-                            ?.setScale(0, RoundingMode.UP)
-                            ?.toDouble().toString()
-                        binding.tvPlan.text = user.plan.toString().split(" ").joinToString(separator = " ", transform = String::capitalize)
-                        binding.tvAge.text = user.age.toString()
+        viewModel.fetchUserInfo(uid!!)
+        viewModel.userInfo.observe(this, Observer { user ->
+            binding.tvCalorie.text = user.dailyCalorieNeeds?.toBigDecimal()
+                ?.setScale(0, RoundingMode.UP)
+                ?.toDouble().toString()
+            binding.tvPlan.text = user.plan.toString().split(" ").joinToString(separator = " ", transform = String::capitalize)
+            binding.tvAge.text = user.age.toString()
 
-                        preferencesHelper.dailycalorie =
-                            user.dailyCalorieNeeds?.toBigDecimal()?.setScale(0, RoundingMode.UP)?.toFloat()!!
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                // Handle error
-            }
+            preferencesHelper.dailycalorie =
+                user.dailyCalorieNeeds?.toBigDecimal()?.setScale(0, RoundingMode.UP)?.toFloat()!!
         })
-
-
-
-
-
     }
 
 
@@ -297,11 +258,6 @@ class InfoActivity: AppCompatActivity() {
 
         portionDialog.show()
     }
-// Ini buat ntar kalo misal nge add food ya mem jadi dia auto nge getall food
-
-
-
-
 
     private fun updateCalorieHistoryView() {
         binding.tvCurrCalorie.text = finalCalorieHistory.toString()
