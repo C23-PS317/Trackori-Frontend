@@ -16,6 +16,12 @@ class FoodViewModel() : ViewModel() {
     val foodData = MutableLiveData<FoodByIdData?>()
 
     val AllfoodData = MutableLiveData<List<AllFoodItem>?>()
+
+    val foodHistoryData = MutableLiveData<List<CalorieHistoryItem>>()
+
+    val userInfo = MutableLiveData<User>()
+
+
     private val TAG = "FoodViewModel" // define TAG for logging
 
     fun getFoodById(id: String) = viewModelScope.launch {
@@ -113,6 +119,37 @@ class FoodViewModel() : ViewModel() {
                 }
             })
         }
+    }
+
+    fun fetchFoodHistoryData(uid: String, realDate: String) {
+        trackoriApi.getCalorieHistoryByDate(uid, realDate).enqueue(object : Callback<CalorieHistoryResponse> {
+            override fun onResponse(call: Call<CalorieHistoryResponse>, response: Response<CalorieHistoryResponse>) {
+                val data = response.body()?.data.orEmpty().filter { it.name?.isNotBlank() == true }
+                foodHistoryData.postValue(data)
+            }
+
+            override fun onFailure(call: Call<CalorieHistoryResponse>, t: Throwable) {
+                Log.e("API_ERROR", "Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchUserInfo(uid: String) {
+        trackoriApi.getUserInfo(uid).enqueue(object: Callback<UserResponse> {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                if (response.isSuccessful) {
+                    val userResponse = response.body()
+                    if (userResponse != null && userResponse.success) {
+                        val user = userResponse.data
+                        userInfo.postValue(user)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                // Handle error
+            }
+        })
     }
 
 }
