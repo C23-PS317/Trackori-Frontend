@@ -44,7 +44,7 @@
  
       * **Take Image From Camera**, You can take image from camera in preparation for uploading an image to detect food.
 
-      * **Send image to server to detect a Landmark**, After you prepare the image, you can click the process button to send the image and detect the image and get calorie of the food.
+      * **Send image to server to detect a Food**, After you prepare the image, you can click the process button to send the image and detect the image and get calorie of the food.
       
       * **Edit Credentials**, Users can change their email address.
 
