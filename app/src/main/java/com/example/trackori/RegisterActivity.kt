@@ -14,6 +14,9 @@ import com.example.trackori.api.RegisterCredentials
 import com.example.trackori.api.RegisterResponse
 import com.example.trackori.databinding.ActivityLoginBinding
 import com.example.trackori.databinding.ActivityRegisterBinding
+import isValidEmail
+import isValidPassword
+import isValidUsername
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,30 +54,56 @@ class RegisterActivity : AppCompatActivity() {
         val username = binding.edRegisterUsername.text.toString()
         val email = binding.edRegisterEmail.text.toString()
         val password = binding.edRegisterPassword.text.toString()
-        val age = binding.edRegisterAge.text.toString().toInt()
+        val age = binding.edRegisterAge.text.toString().toIntOrNull()
         val weight = binding.edRegisterWeight.text.toString().toFloatOrNull()
         val height = binding.edRegisterHeight.text.toString().toFloatOrNull()
 
         val gender = binding.spinnerGender.selectedItem.toString()
+
+        if (username.isBlank() || email.isBlank() || password.isBlank() || age == null || weight == null || height == null) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if (gender == "Select Gender") {
             Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show()
             return
         }
-        var no_diet = "no plan"
 
-//        val plan = binding.spinnerDietPlan.selectedItem.toString()
-//        if (plan == "Select Diet Plan") {
-//            Toast.makeText(this, "Please select a diet plan", Toast.LENGTH_SHORT).show()
-//        }
-//        else if(plan == "No Plan"){
-//            no_diet = "no plan"
-//        }
-//        else if(plan == "Bulking"){
-//            no_diet = "bulking"
-//        }
-//        else if(plan == "Defisit Calorie"){
-//            no_diet = "defisit"
-//        }
+        // Check for empty fields
+
+        // Validate email, username, password, age, weight, and height
+        if (!isValidEmail(email)) {
+            Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!isValidUsername(username)) {
+            Toast.makeText(this, "Username should be at least 3 characters and not contain spaces", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!isValidPassword(password)) {
+            Toast.makeText(this, "Password should be at least 8 characters and contain at least one number", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (age < 13 || age > 100) {
+            Toast.makeText(this, "Please enter a valid age between 13 and 100", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (weight < 20 || weight > 300) {
+            Toast.makeText(this, "Please enter a valid weight between 20 and 300 kg", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (height < 100 || height > 250) {
+            Toast.makeText(this, "Please enter a valid height between 100 and 250 cm", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        var no_diet = "no plan"
 
             if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && gender.isNotBlank() &&
                 weight != null && height != null
