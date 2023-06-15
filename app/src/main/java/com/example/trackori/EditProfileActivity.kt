@@ -44,11 +44,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         val genderOptions = arrayOf("Select Gender", "male", "female")
         val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
-        binding.spinnerGender.adapter = genderAdapter
-        val genderPosition = genderOptions.indexOf(previousGender)
-        if (genderPosition != -1) {
-            binding.spinnerGender.setSelection(genderPosition)
-        }
+
 
         val dietPlanOptions = arrayOf("Select Diet Plan", "Defisit Calorie", "Bulking", "No Plan")
         val dietPlanAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, dietPlanOptions)
@@ -70,12 +66,6 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun setupSpinnerGender() {
-        val genderOptions = arrayOf("Select Gender","male", "female")
-        val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
-        binding.spinnerGender.adapter = genderAdapter
-    }
-
     private fun setupSpinnerDietPlan() {
         val dietPlanOptions = arrayOf("Select Diet Plan","Defisit Calorie", "Bulking", "No Plan")
         val dietPlanAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, dietPlanOptions)
@@ -95,33 +85,34 @@ class EditProfileActivity : AppCompatActivity() {
         val previousGender = intent.getStringExtra("gender")
         val api = ApiConfig.getApiService()
 
-        val gender = binding.spinnerGender.selectedItem.toString()
-        if (gender == "Select Gender") {
-            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show()
-            return
-        }
         var no_diet:String? = ""
         var total_calorie= 0f
 
         val plan = binding.spinnerDietPlan.selectedItem.toString()
-        if (plan == "Select Diet Plan") {
-            Toast.makeText(this, "Please select a diet plan", Toast.LENGTH_SHORT).show()
+        when (plan) {
+            "Select Diet Plan" -> {
+                Toast.makeText(this, "Please select a diet plan", Toast.LENGTH_SHORT).show()
+                return
+            }
+            "No Plan" -> {
+                no_diet = "no plan"
+                total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
+            }
+            "Bulking" -> {
+                no_diet = "bulking"
+                total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
+            }
+            "Defisit Calorie" -> {
+                no_diet = "defisit"
+                total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
+            }
+            else -> {
+                Toast.makeText(this, "Unexpected plan selected", Toast.LENGTH_SHORT).show()
+                return
+            }
         }
-        else if(plan == "No Plan"){
-            no_diet = "no plan"
-            total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
 
-        }
-        else if(plan == "Bulking"){
-            no_diet = "bulking"
-            total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
-        }
-        else if(plan == "Defisit Calorie"){
-            no_diet = "defisit"
-            total_calorie = calculateDailyCalorieNeeds(height,weight,age,previousGender,no_diet)
-        }
-
-        if (username.isNotBlank() && gender.isNotBlank() && gender.isNotBlank() &&
+        if (username.isNotBlank()  &&
             weight != null && height != null && plan.isNotBlank()
         ) {
             val editCredentials = UserInfo(

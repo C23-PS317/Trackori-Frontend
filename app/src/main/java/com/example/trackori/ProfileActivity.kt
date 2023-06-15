@@ -137,7 +137,6 @@ class ProfileActivity : AppCompatActivity() {
                             intent.putExtra("age", binding.tvAge.text.toString().toInt())
                             intent.putExtra("weight", weight.toFloat())
                             intent.putExtra("height", height.toFloat())
-                            intent.putExtra("gender", binding.tvGender.text.toString())
                             intent.putExtra("plan", binding.tvPlan.text.toString())
                             intent.putExtra("calorie", binding.tvCalorie.text.toString().toFloat())
                             startActivity(intent)
