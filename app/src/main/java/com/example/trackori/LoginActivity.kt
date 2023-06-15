@@ -36,9 +36,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            binding.btnLogin.setOnClickListener {
                 val email = binding.edLoginEmail.text.toString()
                 val password = binding.edLoginPassword.text.toString()
+
+                if (email.isBlank() || password.isBlank()) {
+                    Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
 
                 val loginCredentials = LoginCredentials(email, password)
                 val call = ApiConfig.getApiService().login(loginCredentials)
@@ -86,7 +91,6 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 })
-            }
         }
         binding.btnOpenRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
